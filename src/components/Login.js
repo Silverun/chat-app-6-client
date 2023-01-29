@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { UserContext } from "../context/UserContext";
 const socket = io("http://localhost:3001");
 
@@ -12,7 +12,7 @@ function Login() {
     userCtx.setCurrentUser(user);
     userCtx.setIsAuth(true);
 
-    socket.connect("http://localhost:3001");
+    // socket.connect("http://localhost:3001");
 
     socket.emit("enter_chat", user);
   };

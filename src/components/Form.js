@@ -10,16 +10,20 @@ const Form = () => {
   const messageInputRef = useRef(null);
   const userCtx = useContext(UserContext);
 
-  const sendButtonHandler = (e) => {
+  const sendButtonHandler = () => {
     const recipient = recipientInputRef.current.value;
     const title = titleInputRef.current.value;
     const message = messageInputRef.current.value;
 
-    socket.emit("message_send", {
+    const data = {
       sender: userCtx.currentUser,
       recipient: recipient,
       title: title,
       message: message,
+    };
+
+    socket.emit("message_send", data, (messageBack) => {
+      console.log(messageBack);
     });
   };
 
