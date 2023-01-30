@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import { useContext, useRef, useState } from "react";
 import { UserContext } from "../context/UserContext";
-const socket = io("http://localhost:3001");
+const socket = io("https://chat-app-6.herokuapp.com/");
 
 function Login() {
   const userNameRef = useRef(null);

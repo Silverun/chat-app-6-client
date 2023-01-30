@@ -3,7 +3,7 @@ import { useState } from "react";
 import io from "socket.io-client";
 import { UserContext } from "../context/UserContext";
 
-const socket = io("http://localhost:3001");
+const socket = io("https://chat-app-6.herokuapp.com/");
 
 const Messages = () => {
   const userCtx = useContext(UserContext);

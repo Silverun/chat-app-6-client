@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserContext";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
-const socket = io("http://localhost:3001");
+const socket = io("https://chat-app-6.herokuapp.com/");
 
 const Form = () => {
   const recipientInputRef = useRef(null);
