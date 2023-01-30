@@ -17,9 +17,7 @@ function Login() {
       userCtx.setCurrentUser(user);
       localStorage.setItem("logged_in_user", user);
       socket.emit("enter_chat", user, (response) => {
-        console.log(...response.result);
         userCtx.setAllMessages([...response.result]);
-        console.log(...response.names);
         userCtx.setAllNames([...response.names]);
       });
     }

@@ -17,7 +17,6 @@ const Form = () => {
     const recipient = recipientInputRef.current.state.text;
     const title = titleInputRef.current.value;
     const message = messageInputRef.current.value;
-    console.log(recipientInputRef.current.state.text);
 
     const data = {
       sender: userCtx.currentUser,
@@ -27,7 +26,6 @@ const Form = () => {
     };
 
     socket.emit("message_send", data, (response) => {
-      console.log(response.message);
       setReplyOnSend(response.message);
       setTimeout(() => {
         setReplyOnSend("");
@@ -59,7 +57,6 @@ const Form = () => {
           </button>
         </div>
       </div>
-
       <div className="mb-3">
         <label htmlFor="recipient" className="form-label">
           Recipient

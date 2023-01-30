@@ -11,12 +11,10 @@ const Messages = () => {
 
   useEffect(() => {
     socket.on("receive_message", (message) => {
-      console.log(message);
       if (message.recipient === userCtx.currentUser) {
         setMessages((prevMsgs) => [...prevMsgs, message]);
       }
     });
-
     return () => {
       socket.off("receive_message");
     };
