@@ -6,6 +6,7 @@ export const UserContextProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
   const [allMessages, setAllMessages] = useState([]);
+  const [allNames, setAllNames] = useState([]);
 
   const value = {
     isAuth,
@@ -14,6 +15,8 @@ export const UserContextProvider = ({ children }) => {
     setCurrentUser,
     allMessages,
     setAllMessages,
+    allNames,
+    setAllNames,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

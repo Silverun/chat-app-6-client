@@ -1,12 +1,8 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import io from "socket.io-client";
 import { UserContext } from "../context/UserContext";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 const socket = io("http://localhost:3001");
 
@@ -18,9 +14,10 @@ const Form = () => {
   const [replyOnSend, setReplyOnSend] = useState("");
 
   const sendButtonHandler = () => {
-    const recipient = recipientInputRef.current.value;
+    const recipient = recipientInputRef.current.state.text;
     const title = titleInputRef.current.value;
     const message = messageInputRef.current.value;
+    console.log(recipientInputRef.current.state.text);
 
     const data = {
       sender: userCtx.currentUser,
@@ -40,12 +37,14 @@ const Form = () => {
 
   const LogOutButtonHandler = useCallback(() => {
     userCtx.setCurrentUser("");
+    userCtx.setAllMessages([]);
+    userCtx.setAllNames([]);
     userCtx.setIsAuth(false);
     localStorage.clear();
   }, [userCtx]);
 
   return (
-    <div className="container mt-3">
+    <div className="container w-50 mt-3">
       <div className="row align-items-center">
         <div className="col">
           <h4>Welcome, {userCtx.currentUser}</h4>
@@ -65,13 +64,10 @@ const Form = () => {
         <label htmlFor="recipient" className="form-label">
           Recipient
         </label>
-        <input
-          ref={recipientInputRef}
-          type="text"
-          className="form-control"
+        <Typeahead
           id="recipient"
-          placeholder="To..."
-          autoComplete="true"
+          ref={recipientInputRef}
+          options={userCtx.allNames.map((user) => user.user_name)}
         />
       </div>
       <div className="mb-3">
@@ -109,7 +105,7 @@ const Form = () => {
         </div>
         <div className="col">
           {replyOnSend ? (
-            <div className="alert alert-success" role="alert">
+            <div className="alert alert-success text-center" role="alert">
               {replyOnSend}
             </div>
           ) : null}

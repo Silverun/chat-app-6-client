@@ -17,15 +17,18 @@ function Login() {
       userCtx.setCurrentUser(user);
       localStorage.setItem("logged_in_user", user);
       socket.emit("enter_chat", user, (response) => {
-        console.log(...response);
-        userCtx.setAllMessages([...response]);
+        console.log(...response.result);
+        userCtx.setAllMessages([...response.result]);
+        console.log(...response.names);
+        userCtx.setAllNames([...response.names]);
       });
     }
   };
 
   return (
-    <div className="container w-50 mt-3">
-      <div className="input-group mb-3">
+    <div className="container text-center w-50 my-5">
+      <h3>Just chat</h3>
+      <div className="input-group mt-5">
         <button
           onClick={onEnterChatClickHandler}
           className="btn btn-outline-secondary"
