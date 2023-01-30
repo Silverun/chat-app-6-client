@@ -5,12 +5,15 @@ export const UserContext = createContext(null);
 export const UserContextProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+  const [allMessages, setAllMessages] = useState([]);
 
   const value = {
     isAuth,
     setIsAuth,
     currentUser,
     setCurrentUser,
+    allMessages,
+    setAllMessages,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

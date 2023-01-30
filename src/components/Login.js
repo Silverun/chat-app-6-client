@@ -1,24 +1,30 @@
 import io from "socket.io-client";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { UserContext } from "../context/UserContext";
 const socket = io("http://localhost:3001");
 
 function Login() {
   const userNameRef = useRef(null);
   const userCtx = useContext(UserContext);
+  const [message, setMessage] = useState("");
 
   const onEnterChatClickHandler = () => {
-    const user = userNameRef.current.value;
-    userCtx.setCurrentUser(user);
-    userCtx.setIsAuth(true);
-
-    // socket.connect("http://localhost:3001");
-
-    socket.emit("enter_chat", user);
+    if (userNameRef.current.value === "") {
+      setMessage("Name cannot be empty.");
+    } else {
+      const user = userNameRef.current.value.trim();
+      userCtx.setIsAuth(true);
+      userCtx.setCurrentUser(user);
+      localStorage.setItem("logged_in_user", user);
+      socket.emit("enter_chat", user, (response) => {
+        console.log(...response);
+        userCtx.setAllMessages([...response]);
+      });
+    }
   };
 
   return (
-    <div className="container mt-3">
+    <div className="container w-50 mt-3">
       <div className="input-group mb-3">
         <button
           onClick={onEnterChatClickHandler}
@@ -32,8 +38,14 @@ function Login() {
           type="text"
           className="form-control"
           placeholder="Enter user name"
+          name="username"
         />
       </div>
+      {message ? (
+        <div className="alert alert-secondary" role="alert">
+          {message}
+        </div>
+      ) : null}
     </div>
   );
 }

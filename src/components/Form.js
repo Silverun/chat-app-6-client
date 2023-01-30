@@ -1,4 +1,10 @@
-import React, { useContext, useRef } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import io from "socket.io-client";
 import { UserContext } from "../context/UserContext";
 
@@ -9,6 +15,7 @@ const Form = () => {
   const titleInputRef = useRef(null);
   const messageInputRef = useRef(null);
   const userCtx = useContext(UserContext);
+  const [replyOnSend, setReplyOnSend] = useState("");
 
   const sendButtonHandler = () => {
     const recipient = recipientInputRef.current.value;
@@ -22,13 +29,38 @@ const Form = () => {
       message: message,
     };
 
-    socket.emit("message_send", data, (messageBack) => {
-      console.log(messageBack);
+    socket.emit("message_send", data, (response) => {
+      console.log(response.message);
+      setReplyOnSend(response.message);
+      setTimeout(() => {
+        setReplyOnSend("");
+      }, 2000);
     });
   };
 
+  const LogOutButtonHandler = useCallback(() => {
+    userCtx.setCurrentUser("");
+    userCtx.setIsAuth(false);
+    localStorage.clear();
+  }, [userCtx]);
+
   return (
     <div className="container mt-3">
+      <div className="row align-items-center">
+        <div className="col">
+          <h4>Welcome, {userCtx.currentUser}</h4>
+        </div>
+        <div className="col-auto">
+          <button
+            onClick={LogOutButtonHandler}
+            type="button"
+            className="btn btn-secondary"
+          >
+            Log Out
+          </button>
+        </div>
+      </div>
+
       <div className="mb-3">
         <label htmlFor="recipient" className="form-label">
           Recipient
@@ -65,13 +97,24 @@ const Form = () => {
           rows="3"
         ></textarea>
       </div>
-      <button
-        onClick={sendButtonHandler}
-        type="submit"
-        className="btn btn-primary"
-      >
-        Send
-      </button>
+      <div className="row">
+        <div className="col">
+          <button
+            onClick={sendButtonHandler}
+            type="submit"
+            className="btn btn-primary"
+          >
+            Send
+          </button>
+        </div>
+        <div className="col">
+          {replyOnSend ? (
+            <div className="alert alert-success" role="alert">
+              {replyOnSend}
+            </div>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 };
